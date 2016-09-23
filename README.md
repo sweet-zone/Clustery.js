@@ -12,11 +12,11 @@
 
 ## 如何使用
 
-首先先去[Clusterize.js](http://clusterize.js.org/)了解下Clusterize.js。
+首先了解一下[Clusterize.js](http://clusterize.js.org/)。
 
-参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数itemHeight，必须显示的指定每一项的高度。
+参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数itemHeight，必须显示的指定每一项的高度。去掉了show_no_data_row、no_data_text、no_data_class、keep_parity、tag等配置。
 
-callbacks只有一个回调：shouldUpdate，在此回调里得到data，更新UI。data可能是一个对象，也可能只是一个数字（仅仅是bottomHeight），若是对象，data数据结构如下：
+callbacks也只剩下一个回调：shouldUpdate，在此回调里得到data，更新UI。data可能是一个对象，也可能只是一个数字（仅仅是bottomHeight），若是对象，data数据结构如下：
 ```js
 {
     start: 0,   // 渲染列表从start到end, 此时需要渲染arr.slice(start, end)   
@@ -26,7 +26,7 @@ callbacks只有一个回调：shouldUpdate，在此回调里得到data，更新U
 }
 ```
 
-列表数据源更新后, 记得update一下~
+**列表数据源更新后, 记得update一下~**
 
 下面是所有的配置项、回调和公共方法：
 
@@ -47,6 +47,9 @@ this.clustery = new Clustery({
 
 // if you want to destroy
 this.clustery.destroy();
+
+// if you modify itemHeight manually
+this.clustery.refresh();
 
 // if you update data
 this.clustery.update(newRows);
