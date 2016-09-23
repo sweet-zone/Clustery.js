@@ -14,7 +14,7 @@
 
 首先了解一下[Clusterize.js](http://clusterize.js.org/)。
 
-参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数itemHeight，必须显示的指定每一项的高度。去掉了show_no_data_row、no_data_text、no_data_class、keep_parity、tag等配置。
+参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数item_height，必须显示的指定每一项的高度。去掉了show_no_data_row、no_data_text、no_data_class、keep_parity、tag等配置。
 
 callbacks也只剩下一个回调：shouldUpdate，在此回调里得到data，更新UI。data可能是一个对象，也可能只是一个数字（仅仅是bottomHeight），若是对象，data数据结构如下：
 ```js

@@ -36,6 +36,12 @@
       scroll_top: 0
     }
 
+    if(! isArray(data.rows))
+      throw new Error("Error! rows is not an Array.");
+    if(!data.item_height || data.item_height <= 0) {
+      throw new Error("Error! item_height is invalid.");
+    }
+
     self.options = {};
     var options = ['item_height', 'rows_in_block', 'blocks_in_cluster', 'callbacks'];
     for(var i = 0, option; option = options[i]; i++) {
@@ -60,9 +66,6 @@
     var rows = data.rows,
       cache = {start: 0, end: 0, bottom: 0},
       scroll_top = self.scroll_elem.scrollTop;
-
-    if(! isArray(rows))
-      throw new Error("Error! rows is not an Array.");
 
     // get row height
     self.exploreEnvironment(rows);
