@@ -17,7 +17,8 @@
     <div class="app" id="app"></div>
     <script type="text/regular" id="tpl">
         <div class="ctrl">
-            <button class="cbtn" id="add" on-click={this.updateData()}>更新数据</button>
+            <button class="cbtn" on-click={this.updateData()}>更新数据</button>
+            <button class="cbtn" on-click={this.destroy()}>销毁组件</button>
         </div>
         <div ref="wrapper" class="wrapper">
             <ul ref="inner">
@@ -55,23 +56,32 @@
                 var scrollElem = this.$refs.wrapper;
                 var itemHeight = 83;
 
-                _this.clustery = new Clustery({
-                    scrollElem: scrollElem,
-                    contentElem: contentElem,
-                    rows: _this.data.items,
-                    item_height: itemHeight,
-                    rows_in_block: 8,
-                    blocks_in_cluster: 4,
-                    callbacks: {
-                        shouldUpdate: function(data) {
-                            _this.setRenderData(data)
+                // 如果不显式的配置 rows_in_block, Clustery.js会根据容器高度计算
+                // 如果显式的配置, 则不需要再setTimeout(fn,0)
+                setTimeout(function() {
+                    _this.clustery = new Clustery({
+                        scrollElem: scrollElem,
+                        contentElem: contentElem,
+                        rows: _this.data.items,
+                        item_height: itemHeight,
+                        blocks_in_cluster: 4,
+                        callbacks: {
+                            shouldUpdate: function(data) {
+                                _this.setRenderData(data)
+                            }
                         }
-                    }
-                }); 
+                    });
+                }, 0);
 
                 this.$watch('items', function(rows) {
                     if(_this.clustery) {
                         _this.clustery.update(rows)
+                    }
+                });
+
+                this.$on('destroy', function() {
+                    if(_this.clustery) {
+                        _this.clustery.destroy();
                     }
                 });
             },

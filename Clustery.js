@@ -28,9 +28,9 @@
 
     var defaults = {
       item_height: 0,       // 每一个item的高度
-      block_height: 0,      // 每一个块的高度 item_height * rows_in_block
-      rows_in_block: 20,    // 每一个块包含的行数
-      rows_in_cluster: 0,   // 每一个cluster包含的行数 blocks_in_cluster * rows_in_block
+      block_height: 0,      // 每一个block的高度 item_height * rows_in_block
+      rows_in_block: 0,     // 每一个block包含的rows
+      rows_in_cluster: 0,   // 每一个cluster包含的rows blocks_in_cluster * rows_in_block
       cluster_height: 0,    // 每一个cluster的高度 block_height * blocks_in_cluster
       blocks_in_cluster: 4, // 每个cluster包含的blocks的个数
       scroll_top: 0
@@ -147,6 +147,13 @@
       var opts = this.options;
       opts.cluster_height = 0;
       if( ! rows.length) return;
+
+      if(!opts.rows_in_block) {
+        opts.rows_in_block = Math.ceil(this.scroll_elem.offsetHeight / opts.item_height);
+      }
+      if(!opts.rows_in_block) {
+        opts.rows_in_block = 20;
+      }
       
       opts.block_height = opts.item_height * opts.rows_in_block;
       opts.rows_in_cluster = opts.blocks_in_cluster * opts.rows_in_block;
