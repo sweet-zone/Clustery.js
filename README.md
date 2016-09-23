@@ -14,7 +14,7 @@
 
 参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数itemHeight，必须显示的指定每一项的高度。
 
-callbacks只有一个回调：shouldUpdate，在此回调里得到data，更新UI。data数据结构如下：
+callbacks只有一个回调：shouldUpdate，在此回调里得到data，更新UI。data可能是一个对象，也可能只是一个数字（仅仅是bottomHeight），若是对象，data数据结构如下：
 ```js
 {
     start: 0,   // 渲染列表从start到end, 此时需要渲染arr.slice(start, end)   
@@ -55,4 +55,4 @@ this.clustery.update(newRows);
 * 每一项的高度要固定，这样就不能用于IM消息列表中。
 * 数据源限定为了数组。
 
-虽然如此，他已经能解决大部分的需求了。
+虽然如此，他已经能解决大部分的需求了，而且并不妨碍你使用自定义滚动条。

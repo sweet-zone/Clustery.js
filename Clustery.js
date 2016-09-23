@@ -61,6 +61,9 @@
       cache = {start: 0, end: 0, bottom: 0},
       scroll_top = self.scroll_elem.scrollTop;
 
+    if(! isArray(rows))
+      throw new Error("Error! rows is not an Array.");
+
     // get row height
     self.exploreEnvironment(rows);
 

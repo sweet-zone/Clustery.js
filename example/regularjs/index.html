@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clustery.js Regularjs</title>
+    <style type="text/css">
+        * { margin: 0; padding: 0; }
+        ul { list-style: none; }
+        h4 { font-size: 16px; margin-bottom: 8px; }
+        .app { width: 600px; margin: 100px auto; }
+        .ctrl { margin-bottom: 10px; }
+        .wrapper { height: 600px; border: 1px solid #ccc; overflow: auto;}
+        .list-item { padding: 10px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <div class="app" id="app"></div>
+    <script type="text/regular" id="tpl">
+        <div class="ctrl">
+            <button class="cbtn" id="add" on-click={this.updateData()}>更新数据</button>
+        </div>
+        <div ref="wrapper" class="wrapper">
+            <ul ref="inner">
+                <div style="height:{topHeight}px"></div>
+                {#list items|render as item}
+                    <li class="list-item" id="{'id' + item.index}">
+                        <h4>Clustery.js</h4>
+                        <p>{item.index + ' >>>>>> ' + item.str}</p>
+                    </li>
+                {/list}
+                <div style="height:{bottomHeight}px"></div>
+            </ul>
+        </div>
+    </script>
+
+    <script src="https://rawgit.com/regularjs/regular/master/dist/regular.js"></script>
+    <script src="../../Clustery.js"></script>
+    <script>
+        var List = Regular.extend({
+            template: '#tpl',
+            config: function() {
+                this.data.start = 0;
+                this.data.end = 0;
+                this.topHeight = 0;
+                this.bottomHeight = 0;
+                this.data.items = [];
+                for(var i = 0; i < 5000; i++) {
+                    this.data.items.push({index: i, str: ' >>>>> Clustery.js 基于Clusterize.js 修改而来, 更简单的展示超长列表, 更加适合于MVVM框架.'});
+                } 
+            },
+
+            init: function() {
+                _this = this;
+                var contentElem = this.$refs.inner;
+                var scrollElem = this.$refs.wrapper;
+                var itemHeight = 83;
+
+                _this.clustery = new Clustery({
+                    scrollElem: scrollElem,
+                    contentElem: contentElem,
+                    rows: _this.data.items,
+                    item_height: itemHeight,
+                    rows_in_block: 8,
+                    blocks_in_cluster: 4,
+                    callbacks: {
+                        shouldUpdate: function(data) {
+                            _this.setRenderData(data)
+                        }
+                    }
+                }); 
+
+                this.$watch('items', function(rows) {
+                    if(_this.clustery) {
+                        _this.clustery.update(rows)
+                    }
+                });
+            },
+
+            setRenderData: function(data) {
+                if(typeof data === 'object') {
+                    this.data.topHeight = data.top_offset;
+                    this.data.bottomHeight = data.bottom_offset;
+                    this.data.start = data.start;
+                    this.data.end = data.end;
+                } else {
+                    this.data.bottomHeight = data;
+                }
+                this.$update();
+            },
+
+            updateData: function() {
+                this.data.items = [];
+                for(var i = 0; i < 2000; i++) {
+                    this.data.items.push({index: i, str: ' >>>>> Clustery.js 基于Clusterize.js 修改而来, 当数据更新时记得调用update方法.'});
+                }
+            }
+        });
+
+        List.filter('render', function(value) {
+            return value.slice(this.data.start, this.data.end);
+        });
+
+        new List().$inject('#app');
+    </script>
+</body>
+</html>
