@@ -12,6 +12,8 @@
 
 ## 如何使用
 
+首先先去[Clusterize.js](http://clusterize.js.org/)了解下Clusterize.js。
+
 参数和Clusterize.js基本一致，不过rows此时是必须传入的，不再是DOM列表，而是要渲染列表的数组。另外增加一个参数itemHeight，必须显示的指定每一项的高度。
 
 callbacks只有一个回调：shouldUpdate，在此回调里得到data，更新UI。data可能是一个对象，也可能只是一个数字（仅仅是bottomHeight），若是对象，data数据结构如下：
