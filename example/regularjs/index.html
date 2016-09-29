@@ -23,7 +23,7 @@
         <div ref="wrapper" class="wrapper">
             <ul ref="inner">
                 <div style="height:{topHeight}px"></div>
-                {#list items|render as item}
+                {#list items|render as item by item_index}
                     <li class="list-item" id="{'id' + item.index}">
                         <h4>Clustery.js</h4>
                         <p>{item.index + ' >>>>>> ' + item.str}</p>
