@@ -117,17 +117,21 @@
       self.scroll_elem.scrollTop = scroll_top;
     }
 
+    // if clean then clear all data
+    // or return all list 
     self.destroy = function(clean) {
       off('scroll', self.scroll_elem, scrollEv);
       off('resize', window, resizeEv);
-      var callbacks = this.options.callbacks;
-      callbacks.shouldUpdate({
-        top_offset: 0,
-        bottom_offset: 0,
-        rows_above: 0,
-        start: 0,
-        end: rows.length
-      });
+      if(!clean) {
+        var callbacks = this.options.callbacks;
+        callbacks.shouldUpdate({
+          top_offset: 0,
+          bottom_offset: 0,
+          rows_above: 0,
+          start: 0,
+          end: rows.length
+        });
+      }
     }
 
     self.refresh = function() {
