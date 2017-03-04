@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clustery.js Vue</title>
+    <style type="text/css">
+        * { margin: 0; padding: 0; }
+        ul { list-style: none; }
+        h4 { font-size: 16px; margin-bottom: 8px; }
+        .app { width: 600px; margin: 100px auto; }
+        .ctrl { margin-bottom: 10px; }
+        .wrapper { height: 600px; border: 1px solid #ccc; overflow: auto;}
+        .list-item { padding: 10px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <div class="app" id="app">
+        <div class="ctrl">
+            <button class="cbtn" @click="updateData">更新数据</button>
+        </div>
+        <div ref="wrapper" class="wrapper">
+            <ul ref="inner">
+                <div :style="{height: topHeight + 'px'}"></div>
+                <li class="list-item"  v-for="item in sliceItems" :key="item.index">
+                    <h4>Clustery.js</h4>
+                    <p>{{item.index + ' >>>>>> ' + item.str}}</p>
+                </li>
+                <div :style="{height: bottomHeight + 'px'}"></div>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="../../Clustery.js"></script>
+    <script>
+        var arr = [];
+        for(var i = 0; i < 5000; i++) {
+            arr.push({index: i, str: ' >>>>> Clustery.js 基于Clusterize.js 修改而来, 更简单的展示超长列表, 更加适合于MVVM框架.'});
+        } 
+        new Vue({
+            el: '#app',
+            data: {
+                start: 0,
+                end: 0,
+                topHeight: 0,
+                bottomHeight: 0,
+                items: arr
+            },
+
+            mounted: function() {
+                var _this = this;
+                var contentElem = this.$refs.inner;
+                var scrollElem = this.$refs.wrapper;
+                var itemHeight = 83;
+
+                this.clustery = new Clustery({
+                    scrollElem: scrollElem,
+                    contentElem: contentElem,
+                    rows: this.items,
+                    item_height: itemHeight,
+                    blocks_in_cluster: 4,
+                    callbacks: {
+                        shouldUpdate: function(_data) {
+                            _this.setRenderData(_data)
+                        }
+                    }
+                });
+            },
+
+            destroyed: function() {
+                if(this.clustery) {
+                    this.clustery.destroy();
+                }
+            },
+
+            watch: {
+                bottomHeight: function(val) {
+                    console.log(val)
+                }
+            },
+
+            methods: {
+                setRenderData: function(_data) {
+                    if(typeof _data === 'object') {
+                        this.topHeight = _data.top_offset; 
+                        this.bottomHeight = _data.bottom_offset; 
+                        this.start = _data.start; 
+                        this.end = _data.end; 
+                    } else {
+                        this.bottomHeight = _data;
+                    }
+                },
+
+                updateData: function() {
+                    this.items = [];
+                    for(var i = 0; i < 2000; i++) {
+                        this.items.push({index: i, str: ' >>>>> Clustery.js 基于Clusterize.js 修改而来, 当数据更新时记得调用update方法.'});
+                    }
+                    if(this.clustery) {
+                        this.clustery.update(this.items);
+                    }
+                }
+            },
+
+            computed: {
+                sliceItems: function() {
+                    return this.items.slice(this.start, this.end);
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
