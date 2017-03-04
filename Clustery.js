@@ -1,8 +1,8 @@
 
 /*!
- * Clustery.js基于Clusterize.js修改而来
+ * Clustery.js 基于Clusterize.js修改而来
  * Clusterize.js 基于DOM, 参数rows传入列表数组或者库自行根据已有的DOM结构解析
- * Clustery.js 基于数据的, 参数rows必须传入数组, 不再是操作DOM结构, 而是返回
+ * Clustery.js 基于数据, 参数rows必须传入数组, 不再是操作DOM结构, 而是返回
  *             操作列表的数据
  *
  * @author darkzone
@@ -28,11 +28,11 @@
 
     var defaults = {
       item_height: 0,       // 每一个item的高度
-      block_height: 0,      // 每一个block的高度 item_height * rows_in_block
       rows_in_block: 0,     // 每一个block包含的rows
+      block_height: 0,      // 每一个block的高度 item_height * rows_in_block
+      blocks_in_cluster: 4, // 每个cluster包含的blocks的个数
       rows_in_cluster: 0,   // 每一个cluster包含的rows blocks_in_cluster * rows_in_block
       cluster_height: 0,    // 每一个cluster的高度 block_height * blocks_in_cluster
-      blocks_in_cluster: 4, // 每个cluster包含的blocks的个数
       scroll_top: 0
     }
 
@@ -134,7 +134,8 @@
       }
     }
 
-    self.refresh = function() {
+    self.refresh = function(item_height) {
+      self.options.item_height = item_height;
       self.getRowsHeight(rows) && self.update(rows);
     }
   }
@@ -179,7 +180,6 @@
         return {
           top_offset: 0,
           bottom_offset: 0,
-          rows_above: 0,
           start: 0,
           end: rows_len
         }
@@ -190,22 +190,17 @@
       var items_start = Math.max((opts.rows_in_cluster - opts.rows_in_block) * cluster_num, 0),
         items_end = items_start + opts.rows_in_cluster,
         top_offset = Math.max(items_start * opts.item_height, 0),
-        bottom_offset = Math.max((rows_len - items_end) * opts.item_height, 0),
-        rows_above = items_start;
-      if(top_offset < 1) {
-        rows_above++;
-      }
+        bottom_offset = Math.max((rows_len - items_end) * opts.item_height, 0);
 
       return {
         top_offset: top_offset,
         bottom_offset: bottom_offset,
-        rows_above: rows_above,
         start: items_start,
         end: items_end
       }
     },
 
-    // if necessary verify data changed and insert to DOM
+    // if necessary verify data changed and notify to user
     notifyData: function(rows, cache) {
       var data = this.generate(rows, this.getClusterNum()),
         this_cluster_start_changed = this.checkChanges('data', data.start, cache),
@@ -215,7 +210,6 @@
 
       if(this_cluster_start_changed || this_cluster_end_changed) {
         callbacks.shouldUpdate(data);
-        // this.options.content_tag == 'ol' && this.content_elem.setAttribute('start', data.rows_above);
       } else if(only_bottom_offset_changed) {
         callbacks.shouldUpdate(data.bottom_offset)
       }

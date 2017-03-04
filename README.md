@@ -49,15 +49,9 @@ this.clustery = new Clustery({
 this.clustery.destroy();
 
 // if you modify itemHeight manually
-this.clustery.refresh();
+this.clustery.refresh(item_height);
 
 // if you update data
 this.clustery.update(newRows);
 ```
 
-## 缺陷
-
-* 每一项的高度要固定，这样就不能用于IM消息列表中。
-* 数据源限定为了数组。
-
-虽然如此，他已经能解决大部分的需求了，而且并不妨碍你使用自定义滚动条。
