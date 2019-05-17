@@ -1,0 +1,17 @@
+{
+  "name": "clustery.js",
+  "version": "1.0.0",
+  "description": "基于[Clusterize.js](http://clusterize.js.org/)，适合于MVVM框架展示超长列表。",
+  "main": "Clustery.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zjzhome/Clustery.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zjzhome/Clustery.js/issues"
+  },
+  "homepage": "https://github.com/zjzhome/Clustery.js#readme"
+}
